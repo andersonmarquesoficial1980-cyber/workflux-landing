@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workflux | Gestão de Campo Inteligente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0A0F2C;
+      --navy2: #0D1B4B;
+      --blue: #00C6FF;
+      --blue-dark: #0099CC;
+      --orange: #FFB300;
+      --orange-dark: #E09900;
+      --gray: #F4F6FA;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --white: #FFFFFF;
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); line-height: 1.6; }
+    h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,15,44,0.97); backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,198,255,0.15);
+      padding: 0 5%; height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--blue), var(--orange));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .nav-logo span { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.2rem; color: white; }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--blue), var(--orange));
+      color: var(--navy); padding: 10px 24px; border-radius: 8px;
+      text-decoration: none; font-weight: 700; font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.9; }
+
+    /* HERO */
+    .hero {
+      padding: 140px 5% 100px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #0A2560 100%);
+      color: white; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 70% 30%, rgba(0,198,255,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 30% 70%, rgba(255,179,0,0.15) 0%, transparent 50%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,198,255,0.15); border: 1px solid rgba(0,198,255,0.3);
+      color: var(--blue); padding: 6px 16px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em;
+      margin-bottom: 28px;
+    }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+    .hero h1 span { background: linear-gradient(135deg, var(--blue), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.15rem; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto 40px; }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--orange));
+      color: var(--navy); padding: 16px 36px; border-radius: 10px;
+      text-decoration: none; font-weight: 800; font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(0,198,255,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,198,255,0.4); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.08); color: white;
+      padding: 16px 36px; border-radius: 10px;
+      text-decoration: none; font-weight: 600; font-size: 1rem;
+      border: 1px solid rgba(255,255,255,0.2); transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+    /* STATS */
+    .stats {
+      padding: 60px 5%;
+      background: var(--navy);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 40px; text-align: center;
+    }
+    .stat-value { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; font-weight: 900; background: linear-gradient(135deg, var(--blue), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 4px; }
+
+    /* PROBLEMA */
+    .problema { padding: 90px 5%; background: var(--gray); text-align: center; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(0,198,255,0.1); color: var(--blue-dark);
+      padding: 6px 16px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .problema h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; margin-bottom: 12px; }
+    .problema > p { color: var(--text-muted); max-width: 600px; margin: 0 auto 48px; font-size: 1.05rem; }
+    .problema-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+    .problema-card { background: white; border-radius: var(--radius); padding: 28px 24px; text-align: left; border: 1px solid #E5E7EB; }
+    .problema-icon { font-size: 2rem; margin-bottom: 12px; }
+    .problema-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+    .problema-card p { font-size: 0.875rem; color: var(--text-muted); }
+
+    /* MÓDULOS */
+    .modulos { padding: 90px 5%; text-align: center; }
+    .modulos h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; margin-bottom: 12px; }
+    .modulos > p { color: var(--text-muted); max-width: 550px; margin: 0 auto 56px; }
+    .modulos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+    .modulo-card {
+      background: white; border-radius: var(--radius); padding: 32px 28px; text-align: left;
+      border: 2px solid #E5E7EB; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .modulo-card:hover { border-color: var(--blue); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,198,255,0.12); }
+    .modulo-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+    .modulo-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .modulo-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+    .modulo-tag { display: inline-block; margin-top: 16px; background: rgba(0,198,255,0.1); color: var(--blue-dark); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+    /* DIFERENCIAIS */
+    .diferenciais { padding: 90px 5%; background: var(--navy); color: white; text-align: center; }
+    .diferenciais h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; margin-bottom: 12px; }
+    .diferenciais > p { color: rgba(255,255,255,0.6); max-width: 550px; margin: 0 auto 56px; }
+    .dif-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .dif-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,198,255,0.2); border-radius: var(--radius); padding: 28px 24px; text-align: left; }
+    .dif-icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .dif-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--blue); }
+    .dif-card p { font-size: 0.875rem; color: rgba(255,255,255,0.6); }
+
+    /* PLANOS */
+    .planos { padding: 90px 5%; background: var(--gray); text-align: center; }
+    .planos h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; margin-bottom: 12px; }
+    .planos > p { color: var(--text-muted); max-width: 500px; margin: 0 auto 56px; }
+    .planos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .plano-card { background: white; border-radius: var(--radius); padding: 36px 28px; text-align: left; border: 2px solid #E5E7EB; position: relative; }
+    .plano-card.destaque { border-color: var(--blue); box-shadow: 0 8px 40px rgba(0,198,255,0.15); }
+    .plano-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--blue), var(--orange)); color: var(--navy); padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; white-space: nowrap; }
+    .plano-nome { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.1rem; margin-bottom: 8px; }
+    .plano-preco { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--navy); margin-bottom: 4px; }
+    .plano-preco span { font-size: 1rem; font-weight: 500; color: var(--text-muted); }
+    .plano-usuarios { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; }
+    .plano-features { list-style: none; margin-bottom: 32px; }
+    .plano-features li { padding: 8px 0; font-size: 0.9rem; border-bottom: 1px solid #F3F4F6; display: flex; align-items: center; gap: 10px; }
+    .plano-features li::before { content: '✓'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+    .plano-btn { display: block; width: 100%; text-align: center; padding: 14px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.2s; }
+    .plano-btn-primary { background: linear-gradient(135deg, var(--blue), var(--orange)); color: var(--navy); }
+    .plano-btn-primary:hover { opacity: 0.9; }
+    .plano-btn-outline { background: transparent; color: var(--navy); border: 2px solid #E5E7EB; }
+    .plano-btn-outline:hover { border-color: var(--blue); color: var(--blue-dark); }
+
+    /* CTA FINAL */
+    .cta-final { padding: 100px 5%; background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%); text-align: center; color: white; }
+    .cta-final h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 16px; }
+    .cta-final h2 span { background: linear-gradient(135deg, var(--blue), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .cta-final p { color: rgba(255,255,255,0.65); max-width: 500px; margin: 0 auto 40px; font-size: 1.05rem; }
+
+    /* FOOTER */
+    footer { padding: 32px 5%; background: #060A1A; color: rgba(255,255,255,0.35); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; }
+    footer a { color: rgba(255,255,255,0.35); text-decoration: none; }
+    footer a:hover { color: var(--blue); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 4%; }
+      .hero { padding: 120px 4% 80px; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">⬡</div>
+    <span>Workflux</span>
+  </div>
+  <a href="#contato" class="nav-cta">Falar com a gente</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🚧 Para construção civil e pavimentação asfáltica</div>
+    <h1>Gestão de campo<br><span>inteligente e digital.</span></h1>
+    <p>Chega de planilha, WhatsApp e papel. O Workflux digitaliza equipes, equipamentos, obras e documentos — direto do campo, pelo celular.</p>
+    <div class="hero-buttons">
+      <a href="#contato" class="btn-primary">Quero uma demonstração →</a>
+      <a href="#modulos" class="btn-secondary">Ver módulos</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div>
+    <div class="stat-value">8+</div>
+    <div class="stat-label">Módulos integrados</div>
+  </div>
+  <div>
+    <div class="stat-value">100%</div>
+    <div class="stat-label">Via celular</div>
+  </div>
+  <div>
+    <div class="stat-value">IA</div>
+    <div class="stat-label">Análise de documentos</div>
+  </div>
+  <div>
+    <div class="stat-value">0</div>
+    <div class="stat-label">Papel necessário</div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="problema">
+  <div class="section-tag">O problema</div>
+  <h2>Como você gerencia seu canteiro hoje?</h2>
+  <p>A maioria das empresas ainda usa planilhas desatualizadas, WhatsApp e papel. O resultado é caos, retrabalho e custo.</p>
+  <div class="problema-grid">
+    <div class="problema-card"><div class="problema-icon">📋</div><h4>Planilhas desatualizadas</h4><p>Dados chegam atrasados, errados ou simplesmente não chegam.</p></div>
+    <div class="problema-card"><div class="problema-icon">📍</div><h4>Onde está cada equipe?</h4><p>Sem visibilidade em tempo real de equipes e equipamentos.</p></div>
+    <div class="problema-card"><div class="problema-icon">🔧</div><h4>Manutenção no escuro</h4><p>Sem diário de equipamentos, problemas aparecem tarde demais.</p></div>
+    <div class="problema-card"><div class="problema-icon">📁</div><h4>Documentos reprovados</h4><p>Integrações travadas por ASO vencido ou OS sem assinatura.</p></div>
+  </div>
+</section>
+
+<!-- MÓDULOS -->
+<section class="modulos" id="modulos">
+  <div class="section-tag">Plataforma modular</div>
+  <h2>Tudo que sua operação precisa</h2>
+  <p>Cada módulo resolve uma dor específica. Comece com o que precisar e expanda.</p>
+  <div class="modulos-grid">
+    <div class="modulo-card"><div class="modulo-icon" style="background:rgba(0,198,255,0.1)">🚜</div><h3>WF Equipamentos</h3><p>Diário digital de equipamentos. Operadores lançam atividades, abastecimento e inspeção visual pelo celular.</p><span class="modulo-tag">Frota & Maquinário</span></div>
+    <div class="modulo-card"><div class="modulo-icon" style="background:rgba(255,179,0,0.1)">🏗️</div><h3>WF Obras</h3><p>RDO completo — Pavimentação, Infraestrutura, Canteiro e mais. Do encarregado ao engenheiro, tudo registrado.</p><span class="modulo-tag" style="background:rgba(255,179,0,0.1);color:#996800;">Obras & Produção</span></div>
+    <div class="modulo-card"><div class="modulo-icon" style="background:rgba(0,255,150,0.1)">👷</div><h3>WF RH</h3><p>Vale Transporte automático com cálculo por rota real, espelho de ponto e registro facial com GPS.</p><span class="modulo-tag" style="background:rgba(0,200,100,0.1);color:#006830;">Recursos Humanos</span></div>
+    <div class="modulo-card"><div class="modulo-icon" style="background:rgba(150,100,255,0.1)">📅</div><h3>WF Programador</h3><p>Programe equipes, locais e responsáveis. Visualize em tempo real o status de cada frente de trabalho.</p><span class="modulo-tag" style="background:rgba(150,100,255,0.1);color:#5020CC;">Planejamento</span></div>
+    <div class="modulo-card"><div class="modulo-icon" style="background:rgba(255,100,100,0.1)">📌</div><h3>WF Demandas</h3><p>Crie e acompanhe demandas entre setores. Fluxo: pendente → aceita → em execução → concluído.</p><span class="modulo-tag" style="background:rgba(255,100,100,0.1);color:#CC2020;">Gestão</span></div>
+    <div class="modulo-card"><div class="modulo-icon" style="background:rgba(0,198,255,0.1)">🤖</div><h3>WF Documentos</h3><p>IA analisa ASO, OS, NRs e Ficha de EPI automaticamente. Chega de reprovar integração por documento vencido.</p><span class="modulo-tag">Inteligência Artificial</span></div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="diferenciais">
+  <div class="section-tag" style="background:rgba(0,198,255,0.1);color:var(--blue);">Por que Workflux</div>
+  <h2>Feito por quem vive a obra</h2>
+  <p>Não é um software genérico adaptado. Foi construído do zero para a realidade do canteiro de obras.</p>
+  <div class="dif-grid">
+    <div class="dif-card"><div class="dif-icon">📱</div><h4>100% pelo celular</h4><p>Funciona no trecho, sem precisar de computador ou escritório.</p></div>
+    <div class="dif-card"><div class="dif-icon">🤖</div><h4>IA integrada</h4><p>Análise automática de documentos antes de subir nas plataformas.</p></div>
+    <div class="dif-card"><div class="dif-icon">⚡</div><h4>Tempo real</h4><p>Saiba onde cada equipe e equipamento está agora.</p></div>
+    <div class="dif-card"><div class="dif-icon">🔧</div><h4>Modular</h4><p>Contrate só o que precisa. Expanda conforme crescer.</p></div>
+    <div class="dif-card"><div class="dif-icon">📊</div><h4>Exporta pro Protheus</h4><p>Gera planilha mensal pronta para importar no seu ERP.</p></div>
+    <div class="dif-card"><div class="dif-icon">🇧🇷</div><h4>Feito para o Brasil</h4><p>NRs, VT, CPTM, EMTU — tudo calibrado para a realidade brasileira.</p></div>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section class="planos" id="planos">
+  <div class="section-tag">Preços</div>
+  <h2>Planos para todo tamanho de empresa</h2>
+  <p>Sem contrato de fidelidade. Cancele quando quiser.</p>
+  <div class="planos-grid">
+    <div class="plano-card">
+      <div class="plano-nome">Starter</div>
+      <div class="plano-preco">R$ 197<span>/mês</span></div>
+      <div class="plano-usuarios">Até 10 usuários · 1 módulo</div>
+      <ul class="plano-features">
+        <li>1 módulo à sua escolha</li>
+        <li>Acesso pelo celular e desktop</li>
+        <li>Suporte por WhatsApp</li>
+        <li>Atualizações inclusas</li>
+      </ul>
+      <a href="#contato" class="plano-btn plano-btn-outline">Começar agora</a>
+    </div>
+    <div class="plano-card destaque">
+      <div class="plano-badge">⭐ Mais popular</div>
+      <div class="plano-nome">Pro</div>
+      <div class="plano-preco">R$ 397<span>/mês</span></div>
+      <div class="plano-usuarios">Até 30 usuários · 3 módulos</div>
+      <ul class="plano-features">
+        <li>3 módulos à sua escolha</li>
+        <li>Acesso pelo celular e desktop</li>
+        <li>Suporte prioritário</li>
+        <li>Exportação para Protheus</li>
+        <li>Atualizações inclusas</li>
+      </ul>
+      <a href="#contato" class="plano-btn plano-btn-primary">Começar agora</a>
+    </div>
+    <div class="plano-card">
+      <div class="plano-nome">Business</div>
+      <div class="plano-preco">R$ 697<span>/mês</span></div>
+      <div class="plano-usuarios">Até 100 usuários · Todos os módulos</div>
+      <ul class="plano-features">
+        <li>Todos os módulos inclusos</li>
+        <li>Acesso pelo celular e desktop</li>
+        <li>Suporte dedicado</li>
+        <li>IA para documentos inclusa</li>
+        <li>Onboarding da equipe</li>
+        <li>Atualizações inclusas</li>
+      </ul>
+      <a href="#contato" class="plano-btn plano-btn-outline">Começar agora</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="contato">
+  <h2>Pronto para digitalizar<br><span>sua operação?</span></h2>
+  <p>Preencha o formulário e entraremos em contato. Sem burocracia, sem contrato.</p>
+
+  <form name="contato" method="POST" data-netlify="true" style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:12px;">
+    <input type="hidden" name="form-name" value="contato" />
+    <input type="text" name="nome" placeholder="Seu nome" required
+      style="padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:1rem;outline:none;" />
+    <input type="text" name="empresa" placeholder="Nome da empresa" required
+      style="padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:1rem;outline:none;" />
+    <input type="tel" name="whatsapp" placeholder="WhatsApp (com DDD)" required
+      style="padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:1rem;outline:none;" />
+    <input type="email" name="email" placeholder="E-mail (opcional)"
+      style="padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:1rem;outline:none;" />
+    <button type="submit" class="btn-primary" style="border:none;cursor:pointer;width:100%;">
+      Quero uma demonstração →
+    </button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Workflux. Todos os direitos reservados.</span>
+  <span>Feito para quem vive a obra 🇧🇷</span>
+</footer>
+
+</body>
+</html>
